@@ -1,0 +1,30 @@
+resources:
+
+  jobs:
+
+    ingest_turbine_data:
+      name: ingest_turbine_data
+      tags:
+        environment: ${bundle.target}
+        owner: al_mclean
+      max_concurrent_runs: 1
+          
+      tasks:
+        - task_key: ingest_data_task
+          job_cluster_key: job_cluster
+          notebook_task:
+            notebook_path: ../src/wt_data_ingestion.ipynb
+            base_parameters:
+              environment: ${bundle.target}
+              bundle_root: '${workspace.file_path}'
+              src_folder: ${var.src_folder}
+              destination_catalog: ${var.bronze_catalog}
+              destination_schema: ${var.bronze_schema}
+      job_clusters:
+        - job_cluster_key: job_cluster
+          new_cluster:
+            spark_version: 15.4.x-scala2.12
+            node_type_id: Standard_D4ds_v5
+            autoscale:
+                min_workers: 1
+                max_workers: 1

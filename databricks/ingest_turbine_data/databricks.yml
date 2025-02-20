@@ -1,0 +1,38 @@
+bundle:
+  name: ingest_turbine_data
+
+sync:
+  paths:
+    - .
+    
+include:
+  - resources/*.yml
+
+variables:
+  src_folder:
+    description: The path to the src csv files
+  bronze_catalog:
+    description: The bronze catalog to use
+  bronze_schema:
+    description: The bronze schema to use
+
+targets:
+  
+  dev:
+    mode: production
+    workspace:
+      host: <workspace host>
+    variables:
+      src_folder: <the path in dev>
+      bronze_catalog: dev_bronze
+      bronze_schema: turbine_data
+
+  prod:
+    mode: production
+    workspace:
+      host: <workspace host>
+    variables:
+      src_folder: <the path in prod>
+      bronze_catalog: prod_bronze
+      bronze_schema: turbine_data
+
